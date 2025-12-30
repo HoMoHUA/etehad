@@ -1,38 +1,54 @@
 import { motion } from "framer-motion";
 import { Home, ShoppingBag, Sparkles, MessageSquare, User } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
-  { icon: Home, label: "خانه", href: "#hero" },
-  { icon: ShoppingBag, label: "محصولات", href: "#products" },
-  { icon: Sparkles, label: "مشاوره", href: "#consultant", isMain: true },
-  { icon: MessageSquare, label: "نظرات", href: "#testimonials" },
-  { icon: User, label: "درباره ما", href: "#why-us" },
+  { icon: Home, label: "خانه", href: "/#hero", path: "/" },
+  { icon: ShoppingBag, label: "محصولات", href: "/#products", path: "/" },
+  { icon: Sparkles, label: "مشاوره", href: "/#consultant", path: "/", isMain: true },
+  { icon: MessageSquare, label: "نظرات", href: "/#testimonials", path: "/" },
+  { icon: User, label: "درباره ما", href: "/#why-us", path: "/" },
 ];
 
 const BottomNavbar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleClick = (item: typeof navItems[0]) => {
+    if (location.pathname !== item.path) {
+      navigate(item.href);
+    } else {
+      const hash = item.href.split("#")[1];
+      if (hash) {
+        const element = document.getElementById(hash);
+        element?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <motion.nav
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+      className="fixed bottom-6 inset-x-0 z-40 flex justify-center px-4"
     >
-      <div className="glass-strong rounded-full px-2 py-2 flex items-center gap-1 shadow-2xl border border-white/20">
-        {navItems.map((item, index) => (
-          <motion.a
+      <div className="glass-strong rounded-full px-3 sm:px-4 py-2 flex items-center justify-center gap-1 sm:gap-2 shadow-2xl border border-white/20">
+        {navItems.map((item) => (
+          <motion.button
             key={item.href}
-            href={item.href}
+            onClick={() => handleClick(item)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             className={`relative flex flex-col items-center justify-center transition-all duration-300 ${
               item.isMain
-                ? "w-14 h-14 -mt-6 rounded-full bg-gradient-to-br from-secondary to-secondary/80 text-secondary-foreground shadow-lg"
-                : "w-12 h-12 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/10"
+                ? "w-12 h-12 sm:w-14 sm:h-14 -mt-6 rounded-full bg-gradient-to-br from-secondary to-secondary/80 text-secondary-foreground shadow-lg"
+                : "w-10 h-10 sm:w-12 sm:h-12 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/10"
             }`}
           >
-            <item.icon className={item.isMain ? "w-6 h-6" : "w-5 h-5"} />
+            <item.icon className={item.isMain ? "w-5 h-5 sm:w-6 sm:h-6" : "w-4 h-4 sm:w-5 sm:h-5"} />
             {!item.isMain && (
-              <span className="text-[10px] mt-0.5 hidden sm:block">{item.label}</span>
+              <span className="text-[9px] sm:text-[10px] mt-0.5 hidden sm:block">{item.label}</span>
             )}
             {item.isMain && (
               <motion.div
@@ -47,7 +63,7 @@ const BottomNavbar = () => {
                 transition={{ repeat: Infinity, duration: 2 }}
               />
             )}
-          </motion.a>
+          </motion.button>
         ))}
       </div>
     </motion.nav>

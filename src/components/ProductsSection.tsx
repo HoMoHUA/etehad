@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import { Eye, ShoppingBag } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 import surfaceImg from "@/assets/surface-pro.png";
 import macbookImg from "@/assets/macbook-pro.png";
 
 const products = [
   {
-    id: 1,
+    id: "1",
     name: "Surface Pro 9",
     brand: "Microsoft",
     specs: "Core i7 | 16GB RAM | 512GB SSD",
@@ -15,7 +16,7 @@ const products = [
     badge: "پرفروش",
   },
   {
-    id: 2,
+    id: "2",
     name: "MacBook Pro 14",
     brand: "Apple",
     specs: "M3 Pro | 18GB RAM | 512GB SSD",
@@ -24,7 +25,7 @@ const products = [
     badge: "جدید",
   },
   {
-    id: 3,
+    id: "3",
     name: "Surface Laptop 5",
     brand: "Microsoft",
     specs: "Core i5 | 8GB RAM | 256GB SSD",
@@ -33,7 +34,7 @@ const products = [
     badge: null,
   },
   {
-    id: 4,
+    id: "4",
     name: "MacBook Air M2",
     brand: "Apple",
     specs: "M2 | 8GB RAM | 256GB SSD",
@@ -83,7 +84,7 @@ const ProductsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group"
             >
-              <div className="glass-card rounded-3xl p-5 h-full flex flex-col hover-lift">
+              <div className="glass-card rounded-3xl p-5 h-full flex flex-col hover-lift relative">
                 {/* Badge */}
                 {product.badge && (
                   <div className="absolute top-4 left-4 z-10">
@@ -102,10 +103,12 @@ const ProductsSection = () => {
                   />
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                    <Button variant="cta" size="default">
-                      <Eye className="w-4 h-4" />
-                      مشاهده جزئیات
-                    </Button>
+                    <Link to={`/product/${product.id}`}>
+                      <Button variant="cta" size="default">
+                        <Eye className="w-4 h-4" />
+                        مشاهده جزئیات
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
