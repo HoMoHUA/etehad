@@ -298,14 +298,22 @@ function initChatWidget() {
   const chatSend = document.getElementById('chat-send');
   const chatMessages = document.getElementById('chat-messages');
 
+  // Chat URL for AI backend
+  const CHAT_URL = 'https://icizpjnlnuopzcuejexz.supabase.co/functions/v1/chat';
+  
+  // Store conversation history
+  let conversationHistory = [];
+  let isLoading = false;
+
   function toggleChat() {
     chatWindow.classList.toggle('open');
     chatButton.classList.toggle('hidden');
   }
 
-  function addMessage(content, isUser) {
+  function addMessage(content, isUser, messageId) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message ' + (isUser ? 'user' : 'bot');
+    if (messageId) messageDiv.id = messageId;
     
     const avatarSvg = isUser 
       ? '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>'
@@ -317,26 +325,110 @@ function initChatWidget() {
     
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return messageDiv;
   }
 
-  function handleSend() {
+  function updateMessage(messageId, content) {
+    const messageDiv = document.getElementById(messageId);
+    if (messageDiv) {
+      const contentP = messageDiv.querySelector('.message-content p');
+      if (contentP) {
+        contentP.textContent = content;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+  }
+
+  async function streamChat(messages) {
+    const resp = await fetch(CHAT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ messages }),
+    });
+
+    if (!resp.ok || !resp.body) {
+      if (resp.status === 429) {
+        throw new Error('سیستم در حال حاضر شلوغ است. لطفاً کمی صبر کنید.');
+      }
+      if (resp.status === 402) {
+        throw new Error('خطا در سرویس. لطفاً بعداً تلاش کنید.');
+      }
+      throw new Error('خطا در اتصال به سرور');
+    }
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let textBuffer = '';
+    let fullResponse = '';
+    const messageId = 'bot-msg-' + Date.now();
+
+    // Add initial bot message
+    addMessage('...', false, messageId);
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      textBuffer += decoder.decode(value, { stream: true });
+
+      let newlineIndex;
+      while ((newlineIndex = textBuffer.indexOf('\n')) !== -1) {
+        let line = textBuffer.slice(0, newlineIndex);
+        textBuffer = textBuffer.slice(newlineIndex + 1);
+
+        if (line.endsWith('\r')) line = line.slice(0, -1);
+        if (line.startsWith(':') || line.trim() === '') continue;
+        if (!line.startsWith('data: ')) continue;
+
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === '[DONE]') break;
+
+        try {
+          const parsed = JSON.parse(jsonStr);
+          const content = parsed.choices?.[0]?.delta?.content;
+          if (content) {
+            fullResponse += content;
+            updateMessage(messageId, fullResponse);
+          }
+        } catch (e) {
+          textBuffer = line + '\n' + textBuffer;
+          break;
+        }
+      }
+    }
+
+    return fullResponse;
+  }
+
+  async function handleSend() {
     const message = chatInput.value.trim();
-    if (!message) return;
+    if (!message || isLoading) return;
+
+    isLoading = true;
+    chatSend.disabled = true;
+    chatInput.disabled = true;
 
     addMessage(message, true);
     chatInput.value = '';
 
-    // Simulate bot response
-    setTimeout(function() {
-      const responses = [
-        'سلام! ممنون از پیامتون. کارشناسان ما به زودی با شما تماس خواهند گرفت.',
-        'برای مشاوره رایگان می‌تونید با شماره ۰۹۱۲۳۴۵۶۷۸۹ تماس بگیرید.',
-        'محصولات ما دارای ۱۲ ماه گارانتی معتبر هستند.',
-        'برای دیدن محصولات، به بخش محصولات سایت مراجعه کنید.'
-      ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      addMessage(randomResponse, false);
-    }, 1000);
+    // Add to conversation history
+    conversationHistory.push({ role: 'user', content: message });
+
+    try {
+      const response = await streamChat(conversationHistory);
+      // Add assistant response to history
+      conversationHistory.push({ role: 'assistant', content: response });
+    } catch (error) {
+      console.error('Chat error:', error);
+      addMessage(error.message || 'خطا در دریافت پاسخ. لطفاً دوباره تلاش کنید.', false);
+    } finally {
+      isLoading = false;
+      chatSend.disabled = false;
+      chatInput.disabled = false;
+      chatInput.focus();
+    }
   }
 
   chatButton.addEventListener('click', toggleChat);
