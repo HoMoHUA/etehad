@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Laptop, Phone } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 
 const navLinks = [
-  { label: "صفحه اصلی", href: "#hero" },
-  { label: "محصولات", href: "#products" },
-  { label: "چرا اتحاد؟", href: "#why-us" },
-  { label: "نظرات", href: "#testimonials" },
-  { label: "تماس با ما", href: "#footer" },
+  { label: "صفحه اصلی", href: "/" },
+  { label: "محصولات", href: "/shop" },
+  { label: "چرا اتحاد؟", href: "/about" },
+  { label: "تماس با ما", href: "/contact" },
 ];
 
 const Header = () => {
@@ -47,7 +47,7 @@ const Header = () => {
             isScrolled ? "h-14" : "h-16 lg:h-20"
           }`}>
             {/* Logo */}
-            <a href="#hero" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <motion.div 
                 layout
                 className={`rounded-xl bg-gradient-to-br from-secondary to-secondary/70 flex items-center justify-center transition-all duration-500 ${
@@ -61,18 +61,18 @@ const Header = () => {
               <span className={`font-bold text-foreground transition-all duration-500 ${
                 isScrolled ? "text-lg" : "text-xl"
               }`}>اتحاد</span>
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
+                  to={link.href}
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm font-medium"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
 
@@ -120,14 +120,14 @@ const Header = () => {
             >
               <nav className={`${isScrolled ? "px-6" : "container mx-auto px-4"} py-4 flex flex-col gap-4`}>
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.href}
-                    href={link.href}
+                    to={link.href}
                     onClick={() => setIsOpen(false)}
                     className="text-muted-foreground hover:text-foreground transition-colors py-2"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
                 <Button variant="cta" size="lg" className="mt-2">
                   مشاوره رایگان

@@ -3,11 +3,11 @@ import { Home, ShoppingBag, Sparkles, MessageSquare, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
-  { icon: Home, label: "خانه", href: "/#hero", path: "/" },
-  { icon: ShoppingBag, label: "محصولات", href: "/#products", path: "/" },
+  { icon: Home, label: "خانه", href: "/", path: "/", isHome: true },
+  { icon: ShoppingBag, label: "محصولات", href: "/shop", path: "/shop" },
   { icon: Sparkles, label: "مشاوره", href: "/#consultant", path: "/", isMain: true },
-  { icon: MessageSquare, label: "نظرات", href: "/#testimonials", path: "/" },
-  { icon: User, label: "درباره ما", href: "/#why-us", path: "/" },
+  { icon: MessageSquare, label: "تماس", href: "/contact", path: "/contact" },
+  { icon: User, label: "درباره ما", href: "/about", path: "/about" },
 ];
 
 const BottomNavbar = () => {
@@ -15,14 +15,16 @@ const BottomNavbar = () => {
   const navigate = useNavigate();
 
   const handleClick = (item: typeof navItems[0]) => {
-    if (location.pathname !== item.path) {
-      navigate(item.href);
-    } else {
-      const hash = item.href.split("#")[1];
-      if (hash) {
-        const element = document.getElementById(hash);
+    if (item.isMain) {
+      // For consultant section, navigate to home and scroll to section
+      if (location.pathname !== "/") {
+        navigate("/#consultant");
+      } else {
+        const element = document.getElementById("consultant");
         element?.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      navigate(item.href);
     }
   };
 

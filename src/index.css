@@ -73,17 +73,23 @@
 }
 
 @layer utilities {
-  /* Glass Effect */
+  /* Glass Effect - Enhanced blur */
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    @apply bg-white/5 border border-white/10;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   .glass-strong {
-    @apply bg-white/10 backdrop-blur-2xl border border-white/20;
+    @apply bg-white/10 border border-white/20;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
   }
 
   .glass-card {
-    @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/15 shadow-2xl;
+    @apply bg-gradient-to-br from-white/10 to-white/5 border border-white/15 shadow-2xl;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   /* Glow Effects */
