@@ -6,6 +6,8 @@ import WhyUsSection from "@/components/WhyUsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import BottomNavbar from "@/components/BottomNavbar";
+import ChatBot from "@/components/ChatBot";
 
 const Index = () => {
   return (
@@ -18,6 +20,8 @@ const Index = () => {
       <TestimonialsSection />
       <CTASection />
       <Footer />
+      <BottomNavbar />
+      <ChatBot />
     </main>
   );
 };
