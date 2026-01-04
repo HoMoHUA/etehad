@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
 import { Eye, ShoppingBag } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import surfaceImg from "@/assets/surface-pro.png";
 import macbookImg from "@/assets/macbook-pro.png";
+import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const products = [
   {
@@ -47,20 +47,14 @@ const products = [
 const ProductsSection = () => {
   return (
     <section id="products" className="relative py-20 lg:py-32 overflow-hidden">
-      {/* Background */}
+      {/* Background - Simplified */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/5 to-transparent" />
-      <div className="absolute top-1/2 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl opacity-50" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl opacity-50" />
+      <div className="absolute top-1/2 left-0 w-48 h-48 bg-secondary/10 rounded-full blur-3xl opacity-40" />
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl opacity-40" />
 
       <div className="container relative z-10 px-4 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 lg:mb-16"
-        >
+        <ScrollReveal className="text-center mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6">
             <ShoppingBag className="w-5 h-5 text-secondary" />
             <span className="text-sm text-muted-foreground">محصولات ویژه</span>
@@ -71,17 +65,14 @@ const ProductsSection = () => {
           <p className="text-lg text-muted-foreground max-w-xl mx-auto">
             بهترین لپ‌تاپ‌های استوک با کیفیت گرید A+ و گارانتی معتبر
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product, index) => (
-            <motion.div
+            <ScrollReveal
               key={product.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              delay={index * 80}
               className="group"
             >
               <div className="glass-card rounded-3xl p-5 h-full flex flex-col hover-lift relative">
@@ -96,13 +87,14 @@ const ProductsSection = () => {
 
                 {/* Image */}
                 <div className="relative h-48 mb-4 rounded-2xl overflow-hidden bg-gradient-to-br from-muted/30 to-muted/10 flex items-center justify-center">
-                  <motion.img
+                  <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
                   />
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
                     <Link to={`/product/${product.id}`}>
                       <Button variant="cta" size="default">
                         <Eye className="w-4 h-4" />
@@ -133,22 +125,16 @@ const ProductsSection = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </ScrollReveal>
           ))}
         </div>
 
         {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-center mt-12"
-        >
+        <ScrollReveal delay={350} className="text-center mt-12">
           <Button variant="glowOutline" size="xl">
             مشاهده همه محصولات
           </Button>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );
