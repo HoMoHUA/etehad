@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Bot, ChevronLeft, ChevronRight, User, Phone, Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
+import { ScrollReveal } from "@/hooks/use-scroll-animation";
 
 const steps = [
   {
@@ -39,6 +39,7 @@ const ConsultantSection = () => {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [contactInfo, setContactInfo] = useState({ name: "", phone: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const isContactStep = currentStep === steps.length;
   const progress = ((currentStep + 1) / (steps.length + 1)) * 100;
@@ -47,16 +48,16 @@ const ConsultantSection = () => {
     setAnswers({ ...answers, [currentStep]: value });
   };
 
-  const handleNext = () => {
-    if (currentStep < steps.length) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+  const handleStepChange = (direction: 'next' | 'prev') => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      if (direction === 'next' && currentStep < steps.length) {
+        setCurrentStep(currentStep + 1);
+      } else if (direction === 'prev' && currentStep > 0) {
+        setCurrentStep(currentStep - 1);
+      }
+      setIsTransitioning(false);
+    }, 150);
   };
 
   const handleSubmit = () => {
@@ -67,19 +68,13 @@ const ConsultantSection = () => {
 
   return (
     <section id="consultant" className="relative py-20 lg:py-32 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-30" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-3xl opacity-30" />
+      {/* Background Elements - Simplified */}
+      <div className="absolute top-0 left-1/4 w-72 h-72 bg-primary/15 rounded-full blur-3xl opacity-30" />
+      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-accent/15 rounded-full blur-3xl opacity-30" />
 
       <div className="container relative z-10 px-4 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <ScrollReveal className="text-center mb-12">
           <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6">
             <Bot className="w-5 h-5 text-primary" />
             <span className="text-sm text-muted-foreground">مشاور هوشمند</span>
@@ -90,25 +85,17 @@ const ConsultantSection = () => {
           <p className="text-lg text-muted-foreground max-w-xl mx-auto">
             فرم زیر را پر کن تا هوش مصنوعی ما بهترین گزینه‌ها را به تو پیشنهاد دهد.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Form Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-2xl mx-auto"
-        >
+        <ScrollReveal delay={150} className="max-w-2xl mx-auto">
           <div className="glass-card rounded-3xl p-6 lg:p-10">
             {/* Progress Bar */}
             <div className="mb-8">
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-l from-secondary to-primary"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3 }}
+                <div
+                  className="h-full bg-gradient-to-l from-secondary to-primary transition-all duration-300"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
               <div className="flex justify-between mt-2 text-sm text-muted-foreground">
@@ -119,11 +106,7 @@ const ConsultantSection = () => {
 
             {isSubmitted ? (
               /* Success State */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-10"
-              >
+              <div className="text-center py-10">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-secondary to-secondary/70 flex items-center justify-center">
                   <Sparkles className="w-10 h-10 text-secondary-foreground" />
                 </div>
@@ -131,69 +114,63 @@ const ConsultantSection = () => {
                 <p className="text-muted-foreground">
                   کارشناسان ما به زودی با شما تماس خواهند گرفت.
                 </p>
-              </motion.div>
-            ) : isContactStep ? (
-              /* Contact Step */
-              <motion.div
-                key="contact"
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-              >
-                <h3 className="text-xl lg:text-2xl font-bold mb-6 text-center">
-                  برای ارسال نتایج، اطلاعات تماست رو وارد کن
-                </h3>
-                <div className="space-y-4">
-                  <div className="relative">
-                    <User className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="text"
-                      placeholder="نام و نام خانوادگی"
-                      value={contactInfo.name}
-                      onChange={(e) => setContactInfo({ ...contactInfo, name: e.target.value })}
-                      className="w-full glass rounded-xl py-4 pr-12 pl-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                  </div>
-                  <div className="relative">
-                    <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="tel"
-                      placeholder="شماره موبایل"
-                      value={contactInfo.phone}
-                      onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                      className="w-full glass rounded-xl py-4 pr-12 pl-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      dir="ltr"
-                    />
-                  </div>
-                </div>
-              </motion.div>
+              </div>
             ) : (
-              /* Question Steps */
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-              >
-                <h3 className="text-xl lg:text-2xl font-bold mb-6 text-center">
-                  {steps[currentStep].title}
-                </h3>
-                <div className="grid gap-3">
-                  {steps[currentStep].options.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => handleOptionSelect(option.value)}
-                      className={`w-full text-right p-4 rounded-xl transition-all duration-300 ${
-                        answers[currentStep] === option.value
-                          ? "bg-gradient-to-l from-primary/30 to-primary/10 border-2 border-primary"
-                          : "glass hover:bg-white/10 border-2 border-transparent"
-                      }`}
-                    >
-                      <span className="text-foreground font-medium">{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
+              <div className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-50' : 'opacity-100'}`}>
+                {isContactStep ? (
+                  /* Contact Step */
+                  <div>
+                    <h3 className="text-xl lg:text-2xl font-bold mb-6 text-center">
+                      برای ارسال نتایج، اطلاعات تماست رو وارد کن
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="relative">
+                        <User className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <input
+                          type="text"
+                          placeholder="نام و نام خانوادگی"
+                          value={contactInfo.name}
+                          onChange={(e) => setContactInfo({ ...contactInfo, name: e.target.value })}
+                          className="w-full glass rounded-xl py-4 pr-12 pl-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow duration-200"
+                        />
+                      </div>
+                      <div className="relative">
+                        <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <input
+                          type="tel"
+                          placeholder="شماره موبایل"
+                          value={contactInfo.phone}
+                          onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                          className="w-full glass rounded-xl py-4 pr-12 pl-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow duration-200"
+                          dir="ltr"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Question Steps */
+                  <div>
+                    <h3 className="text-xl lg:text-2xl font-bold mb-6 text-center">
+                      {steps[currentStep].title}
+                    </h3>
+                    <div className="grid gap-3">
+                      {steps[currentStep].options.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleOptionSelect(option.value)}
+                          className={`w-full text-right p-4 rounded-xl transition-all duration-200 ${
+                            answers[currentStep] === option.value
+                              ? "bg-gradient-to-l from-primary/30 to-primary/10 border-2 border-primary"
+                              : "glass hover:bg-white/10 border-2 border-transparent"
+                          }`}
+                        >
+                          <span className="text-foreground font-medium">{option.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Navigation */}
@@ -202,7 +179,7 @@ const ConsultantSection = () => {
                 <Button
                   variant="glass"
                   size="lg"
-                  onClick={handlePrev}
+                  onClick={() => handleStepChange('prev')}
                   disabled={currentStep === 0}
                   className="flex-1"
                 >
@@ -224,7 +201,7 @@ const ConsultantSection = () => {
                   <Button
                     variant="cta"
                     size="lg"
-                    onClick={handleNext}
+                    onClick={() => handleStepChange('next')}
                     disabled={!answers[currentStep]}
                     className="flex-1"
                   >
@@ -235,7 +212,7 @@ const ConsultantSection = () => {
               </div>
             )}
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

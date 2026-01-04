@@ -64,41 +64,56 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
   }
 
   body {
     @apply bg-background text-foreground font-vazir antialiased;
     direction: rtl;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer utilities {
-  /* Glass Effect - Enhanced blur */
+  /* Glass Effect - Optimized for performance */
   .glass {
     @apply bg-white/5 border border-white/10;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .glass-strong {
     @apply bg-white/10 border border-white/20;
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-  }
-
-  .glass-card {
-    @apply bg-gradient-to-br from-white/10 to-white/5 border border-white/15 shadow-2xl;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Glow Effects */
+  .glass-card {
+    @apply bg-gradient-to-br from-white/10 to-white/5 border border-white/15 shadow-xl;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* Glow Effects - Simplified for performance */
   .glow-primary {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3), 0 0 80px hsl(var(--primary) / 0.1);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.25);
   }
 
   .glow-secondary {
-    box-shadow: 0 0 40px hsl(var(--secondary) / 0.4), 0 0 80px hsl(var(--secondary) / 0.2);
+    box-shadow: 0 0 30px hsl(var(--secondary) / 0.3);
   }
 
   /* Gradient Text */
@@ -106,7 +121,7 @@
     @apply bg-clip-text text-transparent bg-gradient-to-l from-primary via-accent to-secondary;
   }
 
-  /* Animated Background */
+  /* Animated Background - GPU accelerated */
   .animated-gradient-bg {
     background: linear-gradient(
       135deg,
@@ -114,8 +129,9 @@
       hsl(var(--gradient-mid)) 50%,
       hsl(var(--gradient-end)) 100%
     );
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    background-size: 200% 200%;
+    animation: gradientShift 20s ease-in-out infinite;
+    will-change: background-position;
   }
 
   @keyframes gradientShift {
@@ -127,92 +143,101 @@
     }
   }
 
-  /* Floating Animation */
+  /* Floating Animation - Optimized */
   .float {
-    animation: float 6s ease-in-out infinite;
+    animation: float 8s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes float {
     0%, 100% {
-      transform: translateY(0px);
+      transform: translateY(0) translateZ(0);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-15px) translateZ(0);
     }
   }
 
-  /* Pulse Glow */
+  /* Pulse Glow - Simplified */
   .pulse-glow {
-    animation: pulseGlow 3s ease-in-out infinite;
+    animation: pulseGlow 4s ease-in-out infinite;
   }
 
   @keyframes pulseGlow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--secondary) / 0.3);
+      box-shadow: 0 0 15px hsl(var(--secondary) / 0.2);
     }
     50% {
-      box-shadow: 0 0 40px hsl(var(--secondary) / 0.6), 0 0 60px hsl(var(--secondary) / 0.3);
+      box-shadow: 0 0 25px hsl(var(--secondary) / 0.4);
     }
   }
 
-  /* Fade In Up Animation */
-  .fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
+  /* Scroll-triggered animations using CSS */
+  .scroll-fade-in {
     opacity: 0;
+    transform: translateY(20px) translateZ(0);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
   }
 
-  /* Stagger delays */
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
+  /* Stagger delays for lists */
+  .stagger-1 { transition-delay: 50ms; }
+  .stagger-2 { transition-delay: 100ms; }
+  .stagger-3 { transition-delay: 150ms; }
+  .stagger-4 { transition-delay: 200ms; }
+  .stagger-5 { transition-delay: 250ms; }
 
-  /* Liquid blob animation */
+  /* Liquid blob animation - Simplified */
   .blob {
-    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-    animation: blob 8s ease-in-out infinite;
+    border-radius: 50%;
+    animation: blob 12s ease-in-out infinite;
+    will-change: transform, border-radius;
   }
 
   @keyframes blob {
     0%, 100% {
-      border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-      transform: rotate(0deg) scale(1);
+      border-radius: 40% 60% 70% 30% / 45% 45% 55% 55%;
+      transform: rotate(0deg) translateZ(0);
     }
-    33% {
-      border-radius: 70% 30% 46% 54% / 30% 29% 71% 70%;
-      transform: rotate(50deg) scale(1.05);
-    }
-    66% {
-      border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
-      transform: rotate(-20deg) scale(0.95);
+    50% {
+      border-radius: 60% 40% 30% 70% / 55% 55% 45% 45%;
+      transform: rotate(30deg) translateZ(0);
     }
   }
 
-  /* Parallax */
-  .parallax {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-  }
-
-  /* Hover scale */
+  /* GPU-accelerated hover effects */
   .hover-lift {
-    @apply transition-all duration-500;
+    @apply transition-all duration-300;
+    transform: translateZ(0);
   }
 
   .hover-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 60px -15px hsl(var(--primary) / 0.3);
+    transform: translateY(-6px) translateZ(0);
+    box-shadow: 0 15px 40px -10px hsl(var(--primary) / 0.2);
+  }
+
+  /* Smooth scroll indicator */
+  .scroll-indicator {
+    animation: scrollBounce 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% {
+      transform: translateY(0) translateZ(0);
+    }
+    50% {
+      transform: translateY(8px) translateZ(0);
+    }
+  }
+
+  /* Hardware-accelerated transforms */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 }
