@@ -1,0 +1,300 @@
+/*
+ * ═══════════════════════════════════════════════
+ *  اتحاد (Ettehad) — Brand Kit & Design System
+ *  Version: 1.0
+ *  Last Updated: 2026-02-23
+ * ═══════════════════════════════════════════════
+ *
+ *  Copy this file into any project to replicate
+ *  the Ettehad brand identity and UI system.
+ * ═══════════════════════════════════════════════
+ */
+
+/* ─── 1. WEB FONT ─── */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ─── 2. COLOR PALETTE (HSL) ─── */
+:root {
+  /* ── Core Brand Colors ── */
+  --brand-primary:           217 91% 60%;   /* Blue — main CTA, links, focus rings */
+  --brand-secondary:         32 95% 55%;    /* Orange/Gold — highlights, badges, accents */
+  --brand-accent:            280 65% 50%;   /* Purple — gradient mid, decorative */
+
+  /* ── Backgrounds ── */
+  --brand-bg-base:           222 47% 6%;    /* Deepest background */
+  --brand-bg-card:           222 47% 10%;   /* Card / surface */
+  --brand-bg-elevated:       222 47% 8%;    /* Popover / sidebar */
+
+  /* ── Text ── */
+  --brand-text-primary:      210 40% 98%;   /* Headings, body on dark */
+  --brand-text-muted:        215 20% 65%;   /* Captions, secondary text */
+
+  /* ── Borders & Inputs ── */
+  --brand-border:            217 33% 20%;
+  --brand-input:             217 33% 17%;
+
+  /* ── Semantic ── */
+  --brand-destructive:       0 62.8% 30.6%;
+  --brand-success:           142 76% 36%;
+  --brand-warning:           38 92% 50%;
+
+  /* ── Glass / Frost ── */
+  --brand-glass:             217 33% 17%;
+  --brand-glass-border:      217 33% 30%;
+
+  /* ── Gradients ── */
+  --brand-gradient-start:    222 47% 6%;
+  --brand-gradient-mid:      260 50% 12%;
+  --brand-gradient-end:      217 60% 8%;
+
+  /* ── Glows ── */
+  --brand-glow-primary:      217 91% 60%;
+  --brand-glow-secondary:    32 95% 55%;
+
+  /* ── Border Radius ── */
+  --brand-radius:            1rem;
+  --brand-radius-sm:         calc(1rem - 4px);
+  --brand-radius-md:         calc(1rem - 2px);
+  --brand-radius-lg:         1rem;
+  --brand-radius-xl:         1.5rem;
+  --brand-radius-2xl:        2rem;
+}
+
+/* ─── 3. TYPOGRAPHY ─── */
+/*
+ * Font Family:  Vazirmatn (Google Fonts)
+ * Fallbacks:    system-ui, sans-serif
+ * Direction:    RTL
+ *
+ * Weight Scale:
+ *   300  Light
+ *   400  Regular    — body text
+ *   500  Medium     — UI labels
+ *   600  SemiBold   — subheadings
+ *   700  Bold       — headings
+ *   800  ExtraBold  — hero titles
+ *   900  Black      — display / impact
+ */
+
+.brand-font {
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── 4. READY-TO-USE CLASSES ─── */
+
+/* Background fills */
+.brand-bg           { background-color: hsl(var(--brand-bg-base)); }
+.brand-bg-card      { background-color: hsl(var(--brand-bg-card)); }
+.brand-bg-elevated  { background-color: hsl(var(--brand-bg-elevated)); }
+.brand-bg-primary   { background-color: hsl(var(--brand-primary)); }
+.brand-bg-secondary { background-color: hsl(var(--brand-secondary)); }
+.brand-bg-accent    { background-color: hsl(var(--brand-accent)); }
+
+/* Text */
+.brand-text         { color: hsl(var(--brand-text-primary)); }
+.brand-text-muted   { color: hsl(var(--brand-text-muted)); }
+.brand-text-primary { color: hsl(var(--brand-primary)); }
+.brand-text-secondary { color: hsl(var(--brand-secondary)); }
+.brand-text-accent  { color: hsl(var(--brand-accent)); }
+
+/* Borders */
+.brand-border       { border-color: hsl(var(--brand-border)); }
+
+/* ─── 5. GLASS / FROST EFFECTS ─── */
+.brand-glass {
+  background: hsl(var(--brand-text-primary) / 0.05);
+  border: 1px solid hsl(var(--brand-text-primary) / 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.brand-glass-strong {
+  background: hsl(var(--brand-text-primary) / 0.1);
+  border: 1px solid hsl(var(--brand-text-primary) / 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.brand-glass-card {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--brand-text-primary) / 0.1),
+    hsl(var(--brand-text-primary) / 0.05)
+  );
+  border: 1px solid hsl(var(--brand-text-primary) / 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* ─── 6. GLOW EFFECTS ─── */
+.brand-glow-primary {
+  box-shadow: 0 0 30px hsl(var(--brand-primary) / 0.25);
+}
+
+.brand-glow-secondary {
+  box-shadow: 0 0 30px hsl(var(--brand-secondary) / 0.3);
+}
+
+/* ─── 7. GRADIENT UTILITIES ─── */
+.brand-gradient-text {
+  background: linear-gradient(to left,
+    hsl(var(--brand-primary)),
+    hsl(var(--brand-accent)),
+    hsl(var(--brand-secondary))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--brand-gradient-start)) 0%,
+    hsl(var(--brand-gradient-mid)) 50%,
+    hsl(var(--brand-gradient-end)) 100%
+  );
+}
+
+.brand-gradient-primary {
+  background: linear-gradient(135deg,
+    hsl(var(--brand-primary)),
+    hsl(var(--brand-accent))
+  );
+}
+
+.brand-gradient-warm {
+  background: linear-gradient(135deg,
+    hsl(var(--brand-secondary)),
+    hsl(var(--brand-primary))
+  );
+}
+
+/* ─── 8. ANIMATIONS ─── */
+
+/* Smooth background shift */
+.brand-anim-gradient {
+  background-size: 200% 200%;
+  animation: brand-gradientShift 20s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes brand-gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Float */
+.brand-anim-float {
+  animation: brand-float 8s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes brand-float {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%      { transform: translateY(-15px) translateZ(0); }
+}
+
+/* Pulse glow */
+.brand-anim-pulse-glow {
+  animation: brand-pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes brand-pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px hsl(var(--brand-secondary) / 0.2); }
+  50%      { box-shadow: 0 0 25px hsl(var(--brand-secondary) / 0.4); }
+}
+
+/* Blob morph */
+.brand-anim-blob {
+  border-radius: 50%;
+  animation: brand-blob 12s ease-in-out infinite;
+  will-change: transform, border-radius;
+}
+
+@keyframes brand-blob {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 45% 45% 55% 55%;
+    transform: rotate(0deg) translateZ(0);
+  }
+  50% {
+    border-radius: 60% 40% 30% 70% / 55% 55% 45% 45%;
+    transform: rotate(30deg) translateZ(0);
+  }
+}
+
+/* Scroll reveal (pair with JS IntersectionObserver) */
+.brand-anim-scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px) translateZ(0);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.brand-anim-scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+}
+
+/* Hover lift */
+.brand-hover-lift {
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+}
+
+.brand-hover-lift:hover {
+  transform: translateY(-6px) translateZ(0);
+  box-shadow: 0 15px 40px -10px hsl(var(--brand-primary) / 0.2);
+}
+
+/* Scroll bounce indicator */
+.brand-anim-scroll-indicator {
+  animation: brand-scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes brand-scrollBounce {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%      { transform: translateY(8px) translateZ(0); }
+}
+
+/* Stagger delays */
+.brand-stagger-1 { transition-delay: 50ms; }
+.brand-stagger-2 { transition-delay: 100ms; }
+.brand-stagger-3 { transition-delay: 150ms; }
+.brand-stagger-4 { transition-delay: 200ms; }
+.brand-stagger-5 { transition-delay: 250ms; }
+
+/* ─── 9. ACCESSIBILITY ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── 10. QUICK REFERENCE ─── */
+/*
+ * ┌─────────────────────────────────────────────┐
+ * │  ETTEHAD BRAND QUICK REFERENCE              │
+ * ├─────────────────────────────────────────────┤
+ * │  Primary Blue:    hsl(217 91% 60%)  #3B82F6 │
+ * │  Secondary Gold:  hsl(32 95% 55%)   #E89020 │
+ * │  Accent Purple:   hsl(280 65% 50%)  #9333EA │
+ * │  Background:      hsl(222 47% 6%)   #0B1120 │
+ * │  Card Surface:    hsl(222 47% 10%)  #121D33 │
+ * │  Text Primary:    hsl(210 40% 98%)  #F8FAFC │
+ * │  Text Muted:      hsl(215 20% 65%)  #94A3B8 │
+ * │  Border:          hsl(217 33% 20%)  #263044 │
+ * │                                             │
+ * │  Font: Vazirmatn (300–900)                  │
+ * │  Direction: RTL                             │
+ * │  Radius: 1rem (16px)                        │
+ * └─────────────────────────────────────────────┘
+ */
